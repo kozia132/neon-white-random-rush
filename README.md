@@ -8,6 +8,6 @@ opening it gives you 5 options,
 4. view the ban list
 5. exit
 
-the ban list simply removes a level from being able to be generated
+the ban list file works on a level id basis, so if you want to add levels manually youll have to do it through the level ids
 
 most of this was chatgpt'd, im not actually very good at programming icant
