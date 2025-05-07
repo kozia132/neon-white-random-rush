@@ -1,5 +1,6 @@
 import random
 import pyperclip
+import os
 
 levels = {
     "TUT_MOVEMENT": "Movement",
@@ -124,7 +125,18 @@ levels = {
     "SIDEQUEST_ATTITUDE_ADJUSTMENT": "Attitude Adjustment",
     "SIDEQUEST_ROCKETGODZ": "Rocket",
 }
+BAN_LIST_FILE = "banned_levels.txt"
 
+def load_ban_list():
+    if not os.path.exists(BAN_LIST_FILE):
+        return set()
+    with open(BAN_LIST_FILE, "r") as f:
+        return set(line.strip() for line in f if line.strip() in levels)
+
+def save_ban_list(banned):
+    with open(BAN_LIST_FILE, "w") as f:
+        for level_id in banned:
+            f.write(level_id + "\n")
 
 def display_menu():
     print("\n--- Neon White Random Rush ---")
@@ -151,7 +163,7 @@ def view_levels(levels):
         print(f"{k} - {v}")
 
 def main():
-    banned = set()
+    banned = load_ban_list()
     name_to_id = {v.lower(): k for k, v in levels.items()}
     
     while True:
@@ -170,6 +182,7 @@ def main():
             level_id = name_to_id.get(name)
             if level_id:
                 banned.add(level_id)
+                save_ban_list(banned)
                 print(f"{level_id} ({levels[level_id]}) added to ban list.")
             else:
                 print("Level name not found.")
@@ -179,6 +192,7 @@ def main():
             level_id = name_to_id.get(name)
             if level_id and level_id in banned:
                 banned.remove(level_id)
+                save_ban_list(banned)
                 print(f"{level_id} ({levels[level_id]}) removed from ban list.")
             else:
                 print("Level name not found or not in ban list.")
@@ -195,7 +209,5 @@ def main():
         else:
             print("Invalid choice.")
 
-
 if __name__ == "__main__":
     main()
-
